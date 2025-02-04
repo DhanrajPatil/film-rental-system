@@ -1,0 +1,72 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer mode="side" (mouseenter)="closeMenu()">
+    <mat-toolbar>Options</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item *ngFor="let option of sideNavOptions" [routerLink]="option.link">
+        <mat-icon>{{ option.icon }}</mat-icon>
+        <span>{{ option.label }}</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content (mouseenter)="closeMenu()">
+    <mat-toolbar color="primary" (mouseenter)="closeMenu()">
+      <button mat-icon-button (click)="drawer.toggle()" aria-label="Toggle sidenav">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>Rental Management System</span>
+
+      <span class="spacer"></span>
+
+      <mat-menu #customersMenu="matMenu" [hasBackdrop]="false">
+        <button mat-menu-item [routerLink]="'/customers'"> <mat-icon>list</mat-icon>Customers List</button>
+        <button mat-menu-item [routerLink]="'/customers/add'"><mat-icon>person_add</mat-icon>Add Customer</button>
+        <button mat-menu-item [routerLink]="'/customers/dashboard'">Recent Customers Dashboard</button>
+      </mat-menu>
+
+      <mat-menu #filmsMenu="matMenu" [hasBackdrop]="false">
+        <button mat-menu-item [routerLink]="'/films'"> <mat-icon>list</mat-icon> Films List</button>
+        <button mat-menu-item [routerLink]="'/films/add'"> <mat-icon>add</mat-icon> Add Film</button>
+        <button mat-menu-item [routerLink]="'/films/inventory'"> <mat-icon>receipt_long</mat-icon> Film Inventory</button>
+      </mat-menu>
+
+      <mat-menu #actorsMenu="matMenu" [hasBackdrop]="false">
+        <button mat-menu-item [routerLink]="'/actors'"> <mat-icon>list</mat-icon> Actors List</button>
+        <button mat-menu-item [routerLink]="'/actors/add'"> <mat-icon>add_circle</mat-icon> Add Actor</button>
+        <button mat-menu-item [routerLink]="'/actors/:id/films'"><mat-icon>movie</mat-icon>Actor's Films</button>
+      </mat-menu>
+
+      <button mat-button [matMenuTriggerFor]="customersMenu" #customerMenu="matMenuTrigger"
+              (mouseenter)="openMenu(customerMenu, $event)" style="z-index:1050">
+        <mat-icon>group</mat-icon>
+        Customers
+      </button>
+
+      <button mat-button [matMenuTriggerFor]="filmsMenu" #filmMenu="matMenuTrigger"
+              (mouseenter)="openMenu(filmMenu, $event)" style="z-index:1050">
+        <mat-icon>movie</mat-icon>
+        Films
+      </button>
+
+      <button mat-button [matMenuTriggerFor]="actorsMenu" #actorMenu="matMenuTrigger"
+              (mouseenter)="openMenu(actorMenu, $event)" style="z-index:1050">
+        <mat-icon> face </mat-icon>
+        Actors
+      </button>
+
+      <button mat-button routerLink="/rentals">
+        <mat-icon>assignment</mat-icon>
+        Rentals
+      </button>
+
+      <button mat-button routerLink="/login">
+        <mat-icon>logout</mat-icon>
+        Logout
+      </button>
+    </mat-toolbar>
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

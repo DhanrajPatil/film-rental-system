@@ -1,0 +1,14 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.frs-w-full{
+  width: 100%;
+}
+
+.frs-actions {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}

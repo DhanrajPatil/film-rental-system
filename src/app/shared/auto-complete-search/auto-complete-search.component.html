@@ -1,0 +1,20 @@
+<div class="autocomplete-container">
+  <mat-form-field class="full-width">
+    <mat-chip-list #chipList>
+      <mat-chip *ngFor="let option of selectedOptions"
+                [removable]="true" (removed)="removeChip(option)">
+        {{ option.label }} ({{ option.detail }})
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+    <input type="text" matInput [formControl]="searchControl" [matAutocomplete]="auto" placeholder="Search..." />
+  </mat-form-field>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event)">
+    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+      <div class="option-container">
+        <div class="option-row"><strong>First Name:</strong> {{ option.label }}</div>
+        <div class="option-row"><strong>Last Name:</strong> {{ option.detail }}</div>
+      </div>
+    </mat-option>
+  </mat-autocomplete>
+</div>

@@ -1,0 +1,70 @@
+<div class="container">
+  <button mat-raised-button color="primary" class="frs-mb-10 frs-mr-15" routerLink="./add">
+    Add Film
+  </button>
+
+<!--  <div *ngIf="!(films$ | async); else tableContent">-->
+<!--    <mat-spinner></mat-spinner>-->
+<!--  </div>-->
+
+<!--  <ng-template #tableContent>-->
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="filmDataSource" matSort (matSortChange)="sortFilms($event)">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="id">Id</th>
+        <td mat-cell *matCellDef="let film">{{ film?.id }}</td>
+      </ng-container>
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="title">Title</th>
+        <td mat-cell *matCellDef="let film">{{ film?.title }}</td>
+      </ng-container>
+      <ng-container matColumnDef="rentalRate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="rentalRate">Rental Rate</th>
+        <td mat-cell *matCellDef="let film">{{ film?.rentalRate }}</td>
+      </ng-container>
+      <ng-container matColumnDef="length">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="length">Length</th>
+        <td mat-cell *matCellDef="let film">{{ film?.length }}</td>
+      </ng-container>
+      <ng-container matColumnDef="rentalDuration">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="rentalDuration">Rental Duration</th>
+        <td mat-cell *matCellDef="let film">{{film.rentalDuration}}</td>
+      </ng-container>
+      <ng-container matColumnDef="releaseYear">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="releaseYear">Release Year</th>
+        <td mat-cell *matCellDef="let film">{{ film?.releaseYear }}</td>
+      </ng-container>
+      <ng-container matColumnDef="rating">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="rating">Rating</th>
+        <td mat-cell *matCellDef="let film">{{ film?.rating }}</td>
+      </ng-container>
+      <ng-container matColumnDef="replacementCost">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="replacementCost">Replacement Cost</th>
+        <td mat-cell *matCellDef="let film">{{ film?.replacementCost }}</td>
+      </ng-container>
+      <ng-container matColumnDef="language">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="language">Language</th>
+        <td mat-cell *matCellDef="let film">{{ film?.language }}</td>
+      </ng-container>
+      <ng-container matColumnDef="edit" stickyEnd>
+        <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+        <td mat-cell *matCellDef="let film" [routerLink]="['edit', film.id]">
+          <mat-icon>edit</mat-icon>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+<!--  </ng-template>-->
+
+  <mat-paginator class="demo-paginator mat-paginator-sticky"
+                 [pageSizeOptions]="pageSizeOptions"
+                 [pageSize]="currentPageDetails.pageSize"
+                 [pageIndex]="currentPageDetails.pageIndex"
+                 [length]="currentPageDetails.length"
+                 (page)="handlePageEvent($event)"
+                 showFirstLastButtons
+                 aria-label="Select page">
+  </mat-paginator>
+</div>

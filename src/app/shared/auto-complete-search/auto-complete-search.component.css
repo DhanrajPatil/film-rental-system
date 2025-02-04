@@ -1,0 +1,15 @@
+.full-width {
+  width: 100%;
+}
+
+.option-container {
+  display: block;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 5px;
+  white-space: normal;
+}
+
+.option-row {
+  padding: 2px 0;
+}

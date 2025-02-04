@@ -1,0 +1,32 @@
+
+.frs-mb-10{
+  margin-bottom: 10px;
+}
+
+.frs-mr-15{
+  margin-right: 15px;
+}
+
+.mat-column-storeId {
+  width: 12%;
+}
+
+.mat-column-city {
+  width: 15%;
+}
+
+.mat-column-firstName {
+  width: 16%;
+}
+
+.mat-column-lastName {
+  width: 16%;
+}
+
+.mat-column-id {
+  width: 8%;
+}
+
+.mat-column-email {
+  width: 35%;
+}

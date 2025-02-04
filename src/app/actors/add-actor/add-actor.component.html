@@ -1,0 +1,44 @@
+<div class="container">
+  <mat-card>
+    <mat-card-content>
+      <h2 class="text-xl font-bold mb-4">{{ actionHeader }}</h2>
+      <form [formGroup]="actorForm" #actorFormDirective="ngForm">
+        <mat-grid-list cols="4" rowHeight="75" gutterSize="5px">
+          <mat-grid-tile colspan="2" rowspan="1">
+            <mat-form-field class="frs-w-full">
+              <mat-label>First Name</mat-label>
+              <input matInput placeholder="First Name" formControlName="firstName">
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="2" rowspan="1">
+          </mat-grid-tile>
+          <mat-grid-tile colspan="2" rowspan="1">
+            <mat-form-field class="frs-w-full">
+              <mat-label>Last Name</mat-label>
+              <input matInput placeholder="Last Name" formControlName="lastName">
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile colspan="2" rowspan="1">
+          </mat-grid-tile>
+          <mat-grid-tile colspan="2" rowspan="1" >
+            <div class="frs-actions">
+              <button mat-raised-button color="primary" *ngIf="!isViewForm"
+                      [disabled]="actorForm.invalid" (click)="addActor()">
+                {{ actionButtonLabel }}
+              </button>
+              <button mat-raised-button (click)="resetForm()" *ngIf="!isViewForm">
+                Clear
+              </button>
+              <button mat-raised-button (click)="editForm()" *ngIf="isViewForm">
+                Edit
+              </button>
+              <button mat-raised-button (click)="createNew()" *ngIf="isViewForm || isEditForm">
+                Create New
+              </button>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </form>
+    </mat-card-content>
+  </mat-card>
+ </div>

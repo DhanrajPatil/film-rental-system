@@ -1,0 +1,202 @@
+<div class="container">
+  <mat-card>
+    <mat-card-content>
+      <h2 class="text-xl font-bold mb-4">Film Details:</h2>
+      <form #filmDetailForm [formGroup]="filmForm">
+        <mat-grid-list cols="6" rowHeight="80" gutterSize="10px">
+          <mat-grid-tile [colspan]="3" [rowspan]="1">
+            <mat-form-field  class="frs-w-full">
+              <mat-label>Title</mat-label>
+              <input matInput formControlName="title"  />
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="3" [rowspan]="2">
+            <mat-form-field  class="frs-w-full">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="7"></textarea>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="3" [rowspan]="1">
+            <mat-form-field  class="frs-w-full">
+              <mat-label>Release Year</mat-label>
+              <mat-select formControlName="releaseYear" >
+                <mat-option *ngFor="let option of yearOptions" [value]="option">
+                  {{ option }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <mat-form-field  class="frs-w-full">
+              <mat-label>Language</mat-label>
+              <input
+                matInput
+                [matAutocomplete]="langAuto"
+                formControlName="language"
+                (focus)="controlFocused(filmForm.get('language'))"
+              />
+              <mat-autocomplete #langAuto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let option of languageOptions$ | async" [value]="option">
+                  {{ option.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <mat-form-field  class="frs-w-full">
+              <mat-label>Original Language</mat-label>
+              <input
+                matInput
+                [matAutocomplete]="originalLangAuto"
+                formControlName="originalLanguage"
+                (focus)="controlFocused(filmForm.get('originalLanguage'))"
+              />
+              <mat-autocomplete #originalLangAuto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option *ngFor="let option of originalLanguageOptions$ | async" [value]="option">
+                  {{ option.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <mat-form-field  class="frs-w-full">
+              <mat-label>Rental Duration</mat-label>
+              <input matInput type="number" formControlName="rentalDuration"  />
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <mat-form-field  class="frs-w-full">
+              <mat-label>Rental Rate</mat-label>
+              <input matInput type="number" formControlName="rentalRate" step="0.01"  />
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <mat-form-field  class="frs-w-full">
+              <mat-label>Length</mat-label>
+              <input matInput type="number" formControlName="length"  />
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <mat-form-field  class="frs-w-full">
+              <mat-label>Replacement Cost</mat-label>
+              <input matInput type="number" formControlName="replacementCost" step="0.01"  />
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="2" [rowspan]="1">
+            <mat-form-field  class="frs-w-full">
+              <mat-label>Rating</mat-label>
+              <mat-select formControlName="rating" >
+                <mat-option *ngFor="let option of ratingOptions" [value]="option">
+                  {{ option }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="4" [rowspan]="1">
+            <mat-form-field  class="frs-w-full">
+              <mat-label>Special Features</mat-label>
+              <textarea matInput formControlName="specialFeatures" rows="1"></textarea>
+            </mat-form-field>
+          </mat-grid-tile>
+
+        </mat-grid-list>
+
+        <mat-form-field  class="frs-w-full">
+          <mat-label>Actors</mat-label>
+          <mat-chip-list #chipList aria-label="Actor selection">
+            <mat-chip
+              *ngFor="let actor of selectedActors"
+              [disabled]=actorsControl.disabled
+              (removed)="removeActor(actor)">
+              {{actor.firstName}} {{actor.lastName}}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input matInput
+                   placeholder="Search Actor"
+                   #actorInput
+                   formControlName="actors"
+                   [disabled]="actorsControl.disabled"
+                   [matAutocomplete]="actorAuto"
+                   [matChipInputFor]="chipList"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+          </mat-chip-list>
+          <mat-autocomplete #actorAuto="matAutocomplete"
+                            [displayWith]="displayActorFn"
+                            disabled="isViewForm"
+                            (optionSelected)="actorSelected($event)">
+            <mat-option *ngFor="let option of actorOptions$ | async" [value]="option">
+              {{ option.firstName }} {{ option.lastName }}
+            </mat-option>
+          </mat-autocomplete>
+<!--          <frs-auto-complete-search formControlName="actors"></frs-auto-complete-search>-->
+        </mat-form-field>
+
+        <mat-form-field  class="frs-w-full">
+          <mat-label>Categories</mat-label>
+          <mat-chip-list #categoryChipList aria-label="Category selection">
+            <mat-chip
+              *ngFor="let category of selectedCategories"
+              [disabled]=categoriesControl.disabled
+              (removed)="removeCategory(category)">
+              {{category.name}}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input matInput
+                   placeholder="Search Category"
+                   #categoryInput
+                   formControlName="categories"
+                   [disabled]="categoriesControl.disabled"
+                   [matAutocomplete]="categoryAutoComplete"
+                   [matChipInputFor]="categoryChipList"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   (focus)="categoryFocused($event)"/>
+          </mat-chip-list>
+          <mat-autocomplete #categoryAutoComplete="matAutocomplete"
+                            [displayWith]="displayFn"
+                            (optionSelected)="categorySelected($event)">
+            <mat-option *ngFor="let option of categoriesOptions$ | async" [value]="option">
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <div style="display: flex; justify-content: space-around">
+          <button mat-raised-button color="primary" *ngIf="!isViewForm"
+                  [disabled]="filmForm.invalid || !filmForm.dirty" (click)="saveFilm()">
+            Submit
+          </button>
+          <button mat-raised-button (click)="clearForm()"
+                  *ngIf="!isViewForm" color="warn">
+            Clear
+          </button>
+          <button mat-raised-button (click)="resetToOldValues()"
+                  *ngIf="isEditForm" color="accent">
+            Reset to Old
+          </button>
+          <button mat-raised-button (click)="editForm()"
+                  *ngIf="isViewForm">
+            Edit
+          </button>
+          <button mat-raised-button (click)="createNew()"
+                  *ngIf="isViewForm || isEditForm" >
+            Create New
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

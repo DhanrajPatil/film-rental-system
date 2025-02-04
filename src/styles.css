@@ -1,1 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+table {
+  width: 100%;
+}
+
+.mat-paginator-sticky {
+  bottom: 0px;
+  position: sticky;
+  z-index: 10;
+}
+
+.mat-header-cell {
+  background: #f6d8f6;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.mat-cell {
+  border-left: 1px solid #f6d8f6;
+  border-bottom: 1px solid #f6d8f6;
+  font-size: 14px;
+  padding-left: 10px!important;
+}
+
+.mat-header-cell {
+  justify-content: center;
+  padding-left: 10px!important;
+}
+
+.mat-cell:first-child {
+  /* row border */
+  border-left: 1px solid #f6d8f6;
+  padding: 0;
+}
+
+.mat-cell:last-child {
+  /* row border */
+  border-right: 1px solid #f6d8f6;
+  padding: 0;
+}

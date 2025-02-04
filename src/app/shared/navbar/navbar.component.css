@@ -1,0 +1,17 @@
+.sidenav-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.content {
+  padding: 16px;
+}
+
+.mat-drawer-content {
+  background-color: #f1f3fa;
+}
