@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MatMenuTrigger} from "@angular/material/menu";
+import {AuthApiService} from "../../auth/services/auth-api.service";
+import {SocialUser} from "@abacritt/angularx-social-login";
 
 @Component({
   selector: 'frs-navbar',
@@ -18,10 +20,34 @@ export class NavbarComponent implements OnInit {
     { label: 'Logout', link: '/login', icon: 'logout' },
   ];
   lastOpenMenu: MatMenuTrigger | null = null;
+  isLoggedIn = false;
+  user: SocialUser | null = null;
 
-  constructor() { }
+  constructor(private authApi: AuthApiService) {
+    this.authApi.socialAuthStateObservable$.subscribe({
+      next: (user) => {
+        if (user) {
+          this.isLoggedIn = true;
+          this.user = user;
+          console.log('User logged in');
+        }
+      }
+    });
+  }
+
+  canShowSignUp() {
+    return !this.isLoggedIn && window.location.pathname !== '/signup';
+  }
+
+  canShowLogin() {
+    return !this.isLoggedIn && window.location.pathname !== '/login';
+  }
 
   ngOnInit(): void {
+  }
+
+  onLogout() {
+
   }
 
   openMenu(menuTrigger: MatMenuTrigger, event: MouseEvent) {

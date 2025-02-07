@@ -12,6 +12,7 @@ export const environment = {
   languageUrl: 'http://localhost:8080/languages',
   actorUrl: 'http://localhost:8080/actors',
   categoryUrl: 'http://localhost:8080/categories',
+  authUrl: 'http://localhost:8282/auth',
 };
 
 /*

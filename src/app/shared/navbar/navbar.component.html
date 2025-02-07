@@ -59,9 +59,23 @@
         Rentals
       </button>
 
-      <button mat-button routerLink="/login">
+      <button mat-button (click)="onLogout()" *ngIf="isLoggedIn">
         <mat-icon>logout</mat-icon>
         Logout
+      </button>
+
+      <button mat-button routerLink="/singup" *ngIf="canShowSignUp()">
+        <mat-icon>account box</mat-icon>
+        Sign Up
+      </button>
+
+      <button mat-button routerLink="/login" *ngIf="canShowLogin()">
+        <mat-icon>login</mat-icon>
+        LogIn
+      </button>
+
+      <button mat-button routerLink="/login" *ngIf="isLoggedIn">
+        <img [src]="user?.photoUrl" alt="Profile Picture" width="100">
       </button>
     </mat-toolbar>
 

@@ -5,7 +5,7 @@
       <form (ngSubmit)="onLogin()">
         <mat-form-field class="full-width">
           <mat-label>Username</mat-label>
-          <input matInput [(ngModel)]="username" name="username" required />
+          <input matInput type="email" [(ngModel)]="email" name="email" required  />
         </mat-form-field>
         <mat-form-field class="full-width">
           <mat-label>Password</mat-label>
@@ -17,7 +17,10 @@
             required
           />
         </mat-form-field>
-        <button mat-raised-button color="primary" type="submit">Login</button>
+        <mat-card-actions class="full-width" style="text-align: center;">
+          <button mat-raised-button color="primary" type="submit">Login</button>
+          <button (click)="signInWithGoogle()">Sign in with Google</button>
+        </mat-card-actions>
       </form>
     </mat-card-content>
   </mat-card>
