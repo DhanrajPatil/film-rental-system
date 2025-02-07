@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {AsyncValidator, AsyncValidatorFn, FormControl, Validator, ValidatorFn, Validators} from '@angular/forms';
+import {AsyncValidator, AsyncValidatorFn, UntypedFormControl, Validator, ValidatorFn, Validators} from '@angular/forms';
 import {debounceTime} from "rxjs";
 
 @Component({
@@ -13,7 +13,7 @@ export class PasswordInputComponent implements OnInit{
 
   @Input() placeholder = 'Please Enter Password';
   @Input() label = 'Password';
-  @Input() control: FormControl = new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)]);
+  @Input() control: UntypedFormControl = new UntypedFormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)]);
   @Input() validationMessageKeyMap: { [key: string]: string } = {};
 
   constructor() { }

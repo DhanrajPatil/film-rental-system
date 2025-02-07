@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {Film} from "../../models/film";
 import {Language} from "../../models/language";
 import {FilmApiService} from "../services/film-api.service";
@@ -20,7 +20,7 @@ import {ConfirmDialogComponent} from "../../shared/confirm-dialog/confirm-dialog
   styleUrls: ['./add-film.component.css']
 })
 export class AddFilmComponent implements OnInit {
-  filmForm: FormGroup;
+  filmForm: UntypedFormGroup;
   filmId: number | null = null;
   controlsConfig: { [key: string]: any; } = {};
   //languageSubject: Subject<Language[]> = new BehaviorSubject<Language[]>([]);
@@ -30,12 +30,12 @@ export class AddFilmComponent implements OnInit {
   originalLanguageOptions$: Observable<Language[]> = new Observable<Language[]>();
   ratingOptions: string[] = ['G', 'PG', 'R', 'PG13', 'NC17'];
   yearOptions: number[] = Array.from({length: 130}, (v, k) => k + 1900);
-  languageControl!: FormControl;
-  originalLanguageControl!: FormControl;
+  languageControl!: UntypedFormControl;
+  originalLanguageControl!: UntypedFormControl;
   categoriesOptions$: Observable<Category[]> = new Observable<Category[]>();
   actorOptions$: Observable<Actor[]> = new Observable<Actor[]>();
-  actorsControl!: FormControl;
-  categoriesControl!: FormControl;
+  actorsControl!: UntypedFormControl;
+  categoriesControl!: UntypedFormControl;
   allCategoryOptions: Category[] = [];
 
   selectedCategories: Category[] = [];
@@ -52,7 +52,7 @@ export class AddFilmComponent implements OnInit {
   @ViewChild('actorInput') actorInput: ElementRef<HTMLInputElement> | undefined;
   @ViewChild('categoryInput') categoryInput: ElementRef<HTMLInputElement> | undefined;
 
-  constructor( private fb: FormBuilder,
+  constructor( private fb: UntypedFormBuilder,
                private filmService: FilmApiService,
                private route: ActivatedRoute,
                private snackBar: MatSnackBar,
@@ -63,10 +63,10 @@ export class AddFilmComponent implements OnInit {
     const isView = path === 'view';
     this.isEditForm = path === 'edit';
     this.isViewForm = isView;
-    this.categoriesControl = new FormControl({value: [], disabled: isView});
-    this.actorsControl = new FormControl({value: [], disabled: isView});
-    this.languageControl = new FormControl({value: '', disabled: isView}, Validators.required);
-    this.originalLanguageControl = new FormControl({value: '', disabled: isView}, Validators.required);
+    this.categoriesControl = new UntypedFormControl({value: [], disabled: isView});
+    this.actorsControl = new UntypedFormControl({value: [], disabled: isView});
+    this.languageControl = new UntypedFormControl({value: '', disabled: isView}, Validators.required);
+    this.originalLanguageControl = new UntypedFormControl({value: '', disabled: isView}, Validators.required);
     const controlsConfig: { [key: string]: any; } = {
       title: [{value: '', disabled: isView}, [
         Validators.required, StringValidators.emptyStringCheck,

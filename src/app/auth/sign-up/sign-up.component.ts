@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {UserDetails} from "../../models/user-details";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {EmailAvailabilityValidatorService} from "../../shared/validators/email-availability-validator.service";
 import {CountryISO, PhoneNumberFormat, SearchCountryField} from "ngx-intl-tel-input";
 import {StringValidators} from "../../shared/validators/string-validators";
@@ -17,7 +17,7 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{
 export class SignUpComponent implements OnInit {
 
   userDetails: UserDetails | undefined;
-  userForm!: FormGroup ;
+  userForm!: UntypedFormGroup ;
   passwordControl = this.fb.control('',
     [Validators.required,
       Validators.minLength(8),
@@ -39,7 +39,7 @@ export class SignUpComponent implements OnInit {
   PhoneNumberFormat = PhoneNumberFormat;
   preferredCountries: CountryISO[] = [CountryISO.India, CountryISO.Canada];
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private authApi: AuthApiService,
               private router: Router,
               private emailCheckService: EmailAvailabilityValidatorService) {

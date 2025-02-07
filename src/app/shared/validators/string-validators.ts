@@ -1,4 +1,4 @@
-import {AbstractControl, FormControl, ValidationErrors, ValidatorFn} from "@angular/forms";
+import {AbstractControl, UntypedFormControl, ValidationErrors, ValidatorFn} from "@angular/forms";
 import {Observable} from "rxjs";
 
 export class StringValidators {
@@ -11,7 +11,7 @@ export class StringValidators {
     }
   }
 
-  static passwordMatchCheck(matchingControl: FormControl): ValidatorFn {
+  static passwordMatchCheck(matchingControl: UntypedFormControl): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const controlValue = control.value;
       const matchingControlValue = matchingControl?.value;
