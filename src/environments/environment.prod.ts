@@ -7,4 +7,6 @@ export const environment = {
   storeUrl: 'http://elitefolk.tech/stores',
   languageUrl: 'http://elitefolk.tech/languages',
   actorUrl: 'http://elitefolk.tech/actors',
+  categoryUrl: 'http://elitefolk.tech/categories',
+  authUrl: 'http://elitefolk.tech/auth',
 };

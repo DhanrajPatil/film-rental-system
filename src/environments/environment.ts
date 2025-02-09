@@ -12,6 +12,12 @@ export const environment = {
   languageUrl: 'http://localhost:8080/languages',
   actorUrl: 'http://localhost:8080/actors',
   categoryUrl: 'http://localhost:8080/categories',
+  authUrl: 'http://localhost:8282/auth',
+  appName: 'Film Rental Service',
+  supabase: {
+    url: 'https://gqihrnbxfzvnebstnojw.supabase.co',
+    key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxaWhybmJ4Znp2bmVic3Rub2p3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkwNzk3OTgsImV4cCI6MjA1NDY1NTc5OH0.P-lsaaDeCrmw_B1dPBz_s1Hqnf62tHDgxhFLcmuaeYA'
+  }
 };
 
 /*

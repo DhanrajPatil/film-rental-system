@@ -1,11 +1,11 @@
 <div class="login-container">
-  <mat-card>
+  <mat-card class="login-card">
     <mat-card-title>Login</mat-card-title>
     <mat-card-content>
-      <form (ngSubmit)="onLogin()">
+      <form>
         <mat-form-field class="full-width">
           <mat-label>Username</mat-label>
-          <input matInput [(ngModel)]="username" name="username" required />
+          <input matInput type="email" [(ngModel)]="email" name="email" required  />
         </mat-form-field>
         <mat-form-field class="full-width">
           <mat-label>Password</mat-label>
@@ -17,8 +17,12 @@
             required
           />
         </mat-form-field>
-        <button mat-raised-button color="primary" type="submit">Login</button>
       </form>
+      <mat-card-actions align="end">
+        <button mat-raised-button color="primary" (click)="onLogin()">Login</button>
+        <button mat-raised-button color="warn" (click)="signInWithGithub()">GitHub Sign In </button>
+        <div id="google-btn"> </div>
+      </mat-card-actions>
     </mat-card-content>
   </mat-card>
 </div>

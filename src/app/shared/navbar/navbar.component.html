@@ -36,6 +36,11 @@
         <button mat-menu-item [routerLink]="'/actors/:id/films'"><mat-icon>movie</mat-icon>Actor's Films</button>
       </mat-menu>
 
+      <mat-menu #profilesMenu="matMenu" [hasBackdrop]="false">
+        <button mat-menu-item [routerLink]="'/profile'"> <mat-icon>manage_accounts</mat-icon> Profile </button>
+        <button mat-menu-item (click)="onLogout()"> <mat-icon>logout</mat-icon> Log Out</button>
+      </mat-menu>
+
       <button mat-button [matMenuTriggerFor]="customersMenu" #customerMenu="matMenuTrigger"
               (mouseenter)="openMenu(customerMenu, $event)" style="z-index:1050">
         <mat-icon>group</mat-icon>
@@ -59,10 +64,21 @@
         Rentals
       </button>
 
-      <button mat-button routerLink="/login">
-        <mat-icon>logout</mat-icon>
-        Logout
+      <button mat-button routerLink="/signup" *ngIf="canShowSignUp()">
+        <mat-icon>person_add</mat-icon>
+        Sign Up
       </button>
+
+      <button mat-button routerLink="/login" *ngIf="canShowLogin()">
+        <mat-icon>login</mat-icon>
+        LogIn
+      </button>
+
+      <img  [src]="user?.photoUrl" [alt]="user?.firstName"
+            width="50" height="50" style="border-radius: 50%; margin-left: 10px;"
+            [matMenuTriggerFor]="profilesMenu" #profileMenu="matMenuTrigger"
+            (mouseenter)="openMenu(profileMenu, $event)" style="z-index:1050" *ngIf="canShowProfile()">
+
     </mat-toolbar>
 
     <div class="content">

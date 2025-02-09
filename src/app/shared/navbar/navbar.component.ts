@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {MatMenuTrigger} from "@angular/material/menu";
+import {AuthApiService} from "../../auth/services/auth-api.service";
+import {UserDetails} from "../../models/user-details";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'frs-navbar',
@@ -18,10 +21,42 @@ export class NavbarComponent implements OnInit {
     { label: 'Logout', link: '/login', icon: 'logout' },
   ];
   lastOpenMenu: MatMenuTrigger | null = null;
+  user!: UserDetails;
 
-  constructor() { }
+  constructor(private authApi: AuthApiService,
+              private router: Router) {}
+
+  canShowSignUp() {
+    return !this.authApi.isLoggedIn && window.location.pathname !== '/signup';
+  }
+
+  canShowLogin() {
+    return !this.authApi.isLoggedIn && window.location.pathname !== '/login';
+  }
+
+  canShowProfile() {
+    return this.authApi.isLoggedIn;
+  }
 
   ngOnInit(): void {
+    this.authApi.currentUserDetails$.subscribe((user) => {
+      this.user = user;
+    });
+  }
+
+  onLogout() {
+    this.authApi.logout().subscribe({
+      next: () => {
+        this.user = {} as UserDetails;
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.error('logut error', error);
+      },
+      complete: () => {
+        console.log('Logout complete');
+      }
+    });
   }
 
   openMenu(menuTrigger: MatMenuTrigger, event: MouseEvent) {
