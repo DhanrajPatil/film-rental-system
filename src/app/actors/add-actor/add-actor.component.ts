@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Actor} from "../../models/actor";
 import {ActorApiService} from "../service/actor-api.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {AbstractControl, UntypedFormBuilder, UntypedFormGroup, FormGroupDirective, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormGroup, FormGroupDirective, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -13,14 +13,14 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class AddActorComponent implements OnInit {
   actionHeader: string = 'Add Actor';
   actionButtonLabel: string = 'Save';
-  actorForm!: UntypedFormGroup;
+  actorForm!: FormGroup;
   actorId!: number | undefined;
   isViewForm: boolean = false;
   isEditForm: boolean = false;
 
   constructor(private actorService: ActorApiService,
               private snackBar: MatSnackBar,
-              private formBuilder: UntypedFormBuilder,
+              private formBuilder: FormBuilder,
               private router: Router,
               private route: ActivatedRoute) {
     let isView = false;

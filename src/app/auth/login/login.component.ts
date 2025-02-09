@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+declare const google: any;
+import {Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import {AuthApiService} from "../services/auth-api.service";
 
@@ -7,19 +8,32 @@ import {AuthApiService} from "../services/auth-api.service";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
   email: string = '';
   password: string = '';
 
   constructor(private router: Router,
               private authApi: AuthApiService) {
-    this.authApi.socialAuthStateObservable$.subscribe({
-      next: (state) => {
-        if(state) {
-          this.router.navigate(['/films']);
-        }
-      }
+  }
+
+  ngOnInit() {
+    google.accounts.id.initialize({
+      client_id: "1036459211494-jvrq8cdirjkhdtrvf6191at8l9ui19i9.apps.googleusercontent.com",
+      callback: this.handleCredentialResponse.bind(this)
     });
+    google.accounts.id.renderButton(
+      document.getElementById("google-btn"),
+      { theme: "filled_blue", size: "large", shape: "rectangle", width: "200px" }  // customization attributes
+    );
+  }
+
+  handleCredentialResponse(response: any) {
+    if (response.credential) {
+      this.authApi.handleGoogleSignInResponse(response);
+      this.router.navigate(['/films']);
+    } else {
+      console.log("Error: " + response.error);
+    }
   }
 
   onLogin() {
@@ -37,7 +51,9 @@ export class LoginComponent {
       });
   }
 
-  signInWithGoogle(): void {
-    this.authApi.signInWithGoogle();
+  signInWithGithub(): void {
+    this.authApi.signInWithGithub();
   }
+
+
 }

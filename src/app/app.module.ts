@@ -11,7 +11,6 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS} from "@angular/material/snack-bar";
 import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
 import {LOGIN_HEADER_KEY, TOKEN_HEADER_KEY} from "./shared/constants/constants";
-import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "@abacritt/angularx-social-login";
 
 @NgModule({
   declarations: [
@@ -23,8 +22,7 @@ import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "@
     BrowserAnimationsModule,
     AuthModule,
     SharedModule,
-    HttpClientModule,
-    SocialLoginModule
+    HttpClientModule
   ],
   providers: [
     {
@@ -52,20 +50,6 @@ import {GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule} from "@
     {
       provide: LOGIN_HEADER_KEY,
       useValue: 'Authorization'
-    },
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false, // Set to true to auto-login users
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              '1036459211494-jvrq8cdirjkhdtrvf6191at8l9ui19i9.apps.googleusercontent.com' // Replace with your actual Google Client ID
-            ),
-          },
-        ],
-      } as SocialAuthServiceConfig,
     }
   ],
   bootstrap: [AppComponent]

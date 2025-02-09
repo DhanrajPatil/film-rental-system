@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import {filter, map, Observable} from 'rxjs';
 import { debounceTime, switchMap } from 'rxjs/operators';
@@ -18,7 +18,7 @@ interface Option {
   styleUrls: ['./auto-complete-search.component.css']
 })
 export class AutoCompleteSearchComponent implements OnInit {
-  searchControl = new UntypedFormControl();
+  searchControl = new FormControl();
   filteredOptions: Observable<Option[]> = new Observable<Option[]>();
   selectedOptions: Option[] = [];
 
