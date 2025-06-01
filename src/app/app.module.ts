@@ -11,6 +11,7 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS} from "@angular/material/snack-bar";
 import {AuthInterceptor} from "./shared/interceptors/auth.interceptor";
 import {LOGIN_HEADER_KEY, TOKEN_HEADER_KEY} from "./shared/constants/constants";
+import {CredentialsInterceptor} from "./shared/interceptors/credentials.interceptor";
 
 @NgModule({
   declarations: [
@@ -38,9 +39,14 @@ import {LOGIN_HEADER_KEY, TOKEN_HEADER_KEY} from "./shared/constants/constants";
         verticalPosition: 'top'
       }
     },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: AuthInterceptor,
+    //   multi: true
+    // },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
+      useClass: CredentialsInterceptor,
       multi: true
     },
     {
@@ -50,6 +56,10 @@ import {LOGIN_HEADER_KEY, TOKEN_HEADER_KEY} from "./shared/constants/constants";
     {
       provide: LOGIN_HEADER_KEY,
       useValue: 'Authorization'
+    },
+    {
+      provide: 'withCredentials',
+      useValue: true
     }
   ],
   bootstrap: [AppComponent]

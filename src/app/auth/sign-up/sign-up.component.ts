@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, OnInit} from '@angular/core';
 import {UserDetails} from "../../models/user-details";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {EmailAvailabilityValidatorService} from "../../shared/validators/email-availability-validator.service";
@@ -6,6 +6,7 @@ import {CountryISO, PhoneNumberFormat, SearchCountryField} from "ngx-intl-tel-in
 import {StringValidators} from "../../shared/validators/string-validators";
 import {AuthApiService} from "../services/auth-api.service";
 import {Router} from "@angular/router";
+declare const google: any;
 
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]{8,}$/;
 
@@ -14,9 +15,10 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css']
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent implements AfterViewInit, AfterViewChecked {
 
   userDetails: UserDetails | undefined;
+  private googleBtnRendered = false;
   userForm!: FormGroup ;
   passwordControl = this.fb.control('',
     [Validators.required,
@@ -46,14 +48,55 @@ export class SignUpComponent implements OnInit {
     this.userForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(30)]],
       lastName: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(30)]],
-      email: ['', [Validators.required, Validators.email], [this.emailCheckService.validate.bind(this.emailCheckService)]],
+      email: ['', {validators: [Validators.required, Validators.email], asyncValidators: [this.emailCheckService.validate.bind(this.emailCheckService)], updateOn: 'blur'}],
       password: this.passwordControl,
       confirmPassword: this.confirmPasswordControl,
       mobileNumber: [{}, Validators.required],
     });
   }
 
-  ngOnInit(): void {
+
+  ngAfterViewInit() {
+    this.renderGoogleButton();
+  }
+
+  ngAfterViewChecked() {
+    // If the button is missing, re-render it
+    if (!this.googleBtnRendered && document.getElementById('google-btn')) {
+      this.renderGoogleButton();
+    }
+  }
+
+
+  renderGoogleButton() {
+    const btn = document.getElementById('google-btn');
+    if (btn) {
+      google.accounts.id.initialize({
+        client_id: "1036459211494-jvrq8cdirjkhdtrvf6191at8l9ui19i9.apps.googleusercontent.com",
+        callback: this.handleCredentialResponse.bind(this)
+      });
+      google.accounts.id.renderButton(
+        btn,
+        { theme: 'filled_blue', size: 'large', shape: 'rectangle', width: '200px' }
+      );
+      this.googleBtnRendered = true;
+    }
+  }
+
+  handleCredentialResponse(response: any) {
+    if (response.credential) {
+      this.authApi.handleGoogleLogin(response).subscribe({
+        next: (response) => {
+          this.router.navigate(['/films']);
+        },
+        error: (error) => {
+          console.error("Error occured while google sign in", error);
+        },
+        complete: () => {
+          console.log('Google login complete');
+        }
+      });
+    }
   }
 
   signUp() {

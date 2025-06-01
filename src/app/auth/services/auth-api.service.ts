@@ -1,10 +1,8 @@
-import {SupabaseClient, User, createClient} from "@supabase/supabase-js";
-
 declare const google: any;
 import {Inject, Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {BehaviorSubject, Observable, of, Subject, tap} from "rxjs";
+import {BehaviorSubject, catchError, Observable, of, Subject, tap} from "rxjs";
 import {UserDetails} from "../../models/user-details";
 import {LOGIN_HEADER_KEY, TOKEN_HEADER_KEY} from "../../shared/constants/constants";
 import {Router} from "@angular/router";
@@ -17,44 +15,18 @@ export class AuthApiService {
   currentUserDetails$: Subject<UserDetails> = new Subject<UserDetails>();
   isLoggedIn = false;
   logInContext: 'GOOGLE' | 'META' | 'GITHUB' | null =  null;
-  private supabaseClient!: SupabaseClient;
 
   constructor(private http: HttpClient,
               private router: Router,
               @Inject(TOKEN_HEADER_KEY) private tokenKey: string,
               @Inject(LOGIN_HEADER_KEY) private loginHeader: string) {
-    this.supabaseClient = createClient(environment.supabase.url, environment.supabase.key);
-    this.supabaseClient.auth.onAuthStateChange((event, session) => {
-      console.log('Supabase Auth State Change', event, session);
-      if (event === 'SIGNED_IN') {
-        this.isLoggedIn = true;
-        this.logInContext = 'META';
-        if(session && session.user) {
-          const user : UserDetails = {
-            email: session.user.email,
-            firstName: session.user.user_metadata['first_name'],
-            lastName: session.user.user_metadata['last_name'],
-            role: ['ROLE_USER'],
-            token: session.access_token,
-            id: session.user.id,
-            photoUrl: session.user.user_metadata['avatar_url'],
-            password: null
-          }
-          this.currentUserDetails$.next(user);
-          this.router.navigate(['/films']);
-        }
-      } else {
-        this.isLoggedIn = false;
-        this.currentUserDetails$.next({} as UserDetails);
-      }
-    });
   }
 
   login(email: string, password: string): Observable<any> {
     const headers = this.createAuthHeader(email, password);
     return this.http.post(`${this.authUrl}/login`, null, { headers, observe: "response" }).pipe(
       tap((response: any) => {
-          const header = response.headers.get(this.loginHeader);
+          const header = response.headers.get('access_token');
           if (header) {
             this.setToken(header);
             this.isLoggedIn = true;
@@ -78,13 +50,8 @@ export class AuthApiService {
     user.email = '';
     user.password = '';
     return this.http.post(`${this.authUrl}/signup`, user, { headers, observe: "response" }).pipe(
-      tap((response: any) => {
-        const header = response.headers.get(this.loginHeader);
-        if (header) {
-          this.setToken(header);
-          this.isLoggedIn = true;
-          this.currentUserDetails$.next(response as UserDetails);
-        }
+      catchError((error) => {
+        return of(error);
       })
     );
   }
@@ -134,22 +101,6 @@ export class AuthApiService {
     this.setToken(JSON.stringify(token));
   }
 
-  async signInWithGithub() {
-    await this.supabaseClient.auth.signInWithOAuth({
-      provider: 'github'
-    });
-  }
-
-  async signOut() {
-    await this.supabaseClient.auth.signOut();
-  }
-
-  async signInWithGoogle() {
-    await this.supabaseClient.auth.signInWithOAuth({
-      provider: 'google'
-    });
-  }
-
   signOutGoogle() {
     google.accounts.id.disableAutoSelect();
     google.accounts.id.revoke(localStorage.getItem('googleToken'), () => {
@@ -166,5 +117,21 @@ export class AuthApiService {
 
   clearToken(): void {
     sessionStorage.removeItem(this.tokenKey);
+  }
+
+  handleGoogleLogin(googleUser:  any): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${googleUser.credential}`);
+    return this.http.post(`${this.authUrl}/google-login`, {}, {headers, observe: "response"}).pipe(
+      tap((response: any) => {
+          const header = response.headers.get("Set-Cookie");
+          if (header) {
+            this.setToken(header);
+            this.isLoggedIn = true;
+            this.logInContext = null;
+            this.currentUserDetails$.next(response as UserDetails);
+          }
+        }
+      )
+    );
   }
 }

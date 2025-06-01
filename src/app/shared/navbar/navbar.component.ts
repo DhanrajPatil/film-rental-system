@@ -3,6 +3,7 @@ import {MatMenuTrigger} from "@angular/material/menu";
 import {AuthApiService} from "../../auth/services/auth-api.service";
 import {UserDetails} from "../../models/user-details";
 import {Router} from "@angular/router";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'frs-navbar',
@@ -10,6 +11,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+  appName = environment.appName;
   sideNavOptions = [
     { label: 'Customers List', link: '/customers', icon: 'group' },
     { label: 'Add Customer', link: '/customers/add', icon: 'person_add' },
